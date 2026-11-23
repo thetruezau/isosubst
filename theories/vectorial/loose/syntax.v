@@ -49,9 +49,6 @@ Ve (E: elim) (l: list): term :=
   | eapp E u => Ve E (cons (V u) l)
   end.
 
-Definition rename (xi: fin->fin) (t: term) :=
-  V (ren_term xi (U t)).
-            
 Definition subst (sigma: fin->term) (t: term) :=
   (V (subst_term (sigma>>U>>hd) (U t))).
 

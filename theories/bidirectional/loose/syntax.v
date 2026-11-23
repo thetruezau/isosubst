@@ -50,50 +50,48 @@ Be (E: uelim): elim :=
   | ueapp E u => eapp (Be E) (B u)
   end.
 
-Definition rename (xi: fin->fin) (t: term) :=
-  B (ren_term xi (U t)).
-            
 Definition subst (sigma: fin->term) (P: term) :=
   (B (subst_term (sigma>>U>>uhd) (U P))).
 
 Definition esubst (sigma: fin->term) (E: elim) :=
   (Be (subst_elim (sigma>>U>>uhd) (Ue E))).
 
-Definition up_subst (sigma: fin->term) (t: term) :=
-  (V (subst_term (up_elim (sigma>>U>>hd)) (U t))).
+Definition up_subst (sigma: fin->term) (P: term) :=
+  (B (subst_term (up_elim (sigma>>U>>uhd)) (U P))).
 
 (* --- *)
 
-Proposition VU_is_id :
-  (forall t, V (U t) = t) /\ (forall l, Vs (Us l) = l).
+Proposition BU_is_id :
+  (forall P, B (U P) = P) /\ (forall E, Be (Ue E) = E).
 Proof.  
   apply mut_term_ind ; intros ; simpl ;
     try rewrite H ;
     try rewrite H0 ; auto.
 Qed.
 
-Fact der_subst x l l' sigma (Hl': l' = lsubst sigma l):
-  subst sigma (der x l) = cut (sigma x) l'.
+Fact lam_subst P P' sigma
+  (HP': P' = up_subst sigma P):
+  subst sigma (lam P) = lam P'.
+Proof. now rewrite HP'. Qed.
+
+Fact app_subst E E' sigma
+  (HE': E' = esubst sigma E):
+  subst sigma (app E) = app E'.
+Proof. now rewrite HE'. Qed.
+
+Fact evar_subst x sigma:
+  esubst sigma (evar x) = hd (sigma x).
 Proof.
-  simpl. asimpl. rewrite (proj1 VU_is_id). now rewrite Hl'.
+  simpl. asimpl. now rewrite (proj1 BU_is_id). 
 Qed.
 
-Fact lam_subst t sigma :
-  subst sigma (lam t) = lam (up_subst sigma t).
-Proof. easy. Qed.
+Fact hd_subst P P' sigma
+  (HP': P' = subst sigma P):
+  esubst sigma (hd P) = hd P'.
+Proof. now rewrite HP'. Qed.
 
-Fact cut_subst t t' l l' sigma
-  (Ht': t' = subst sigma t)
-  (Hl': l' = lsubst sigma l):
-  subst sigma (cut t l) = cut t' l'.
-Proof. now rewrite Ht',Hl'. Qed.
-
-Fact nil_subst sigma :
-  lsubst sigma nil = nil.
-Proof. easy. Qed.
-
-Fact cons_subst u u' l l' sigma
-  (Hu': u' = subst sigma u)
-  (Hl': l' = lsubst sigma l):
-  lsubst sigma (cons u l) = cons u' l'.
-Proof. now rewrite Hu',Hl'. Qed.
+Fact eapp_subst E E' Q Q' sigma
+  (HE': E' = esubst sigma E)
+  (HQ': Q' = subst sigma Q):
+  esubst sigma (eapp E Q) = eapp E' Q'.
+Proof. now rewrite HE', HQ'. Qed.
