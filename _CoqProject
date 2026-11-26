@@ -1,11 +1,14 @@
 -Q theories/headers headers
 -Q theories/bidirectional bidirectional
+-Q theories/vectorial vectorial
 -Q theories/unified unified
 
 
 theories/headers/axioms.v
-theories/headers/unscoped.v
 theories/headers/fintype.v
+theories/headers/types.v
+theories/headers/relations.v
 
-theories/bidirectional/loose/syntax.v
-theories/unified/syntax.v
+theories/unified/syntax_ws.v
+
+theories/vectorial/loose/syntax_ws.v

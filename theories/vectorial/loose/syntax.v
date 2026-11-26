@@ -71,7 +71,7 @@ Qed.
 Fact der_subst x l l' sigma (Hl': l' = lsubst sigma l):
   subst sigma (der x l) = cut (sigma x) l'.
 Proof.
-  simpl. asimpl. rewrite (proj1 VU_is_id). now rewrite Hl'.
+  simpl. asimpl. subst. now rewrite (proj1 VU_is_id). 
 Qed.
 
 Fact lam_subst t sigma :
@@ -82,7 +82,7 @@ Fact cut_subst t t' l l' sigma
   (Ht': t' = subst sigma t)
   (Hl': l' = lsubst sigma l):
   subst sigma (cut t l) = cut t' l'.
-Proof. now rewrite Ht',Hl'. Qed.
+Proof. now subst. Qed.
 
 Fact nil_subst sigma :
   lsubst sigma nil = nil.
@@ -92,4 +92,4 @@ Fact cons_subst u u' l l' sigma
   (Hu': u' = subst sigma u)
   (Hl': l' = lsubst sigma l):
   lsubst sigma (cons u l) = cons u' l'.
-Proof. now rewrite Hu',Hl'. Qed.
+Proof. now subst. Qed.
